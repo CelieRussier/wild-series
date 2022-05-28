@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Wild Series{% endblock %}
+
+{% block body %}
+
+    <main>
+
+        <h1 class="categoryBigTitle">Liste de toutes les catégories</h1>
+
+            <section class="categoryList">
+
+                <div class="categoryCard">
+                    <ul class="categoryList">
+                    {% for category in categories %}
+                        <li><a href="{{ path("category_show", { categoryName: category.name }) }}">{{ category.name }}</a></li>
+                    {% else %}
+                        Aucune série trouvée.
+                    {% endfor %}
+                    </ul>
+                </div>
+
+            </section>
+
+    </main>
+
+{% endblock %}
