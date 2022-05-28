@@ -13,7 +13,7 @@ class Episode
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $title;
 
     #[ORM\Column(type: 'integer')]
@@ -22,8 +22,7 @@ class Episode
     #[ORM\Column(type: 'text', nullable: true)]
     private $synopsis;
 
-    #[ORM\ManyToOne(targetEntity: season::class, inversedBy: 'episodes')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Season::class, inversedBy: 'episodes')]
     private $season;
 
     public function getId(): ?int
