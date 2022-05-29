@@ -22,14 +22,14 @@ class SeasonFixtures extends Fixture implements DependentFixtureInterface
         */
 
         for ($i = 1; $i <= 5; $i++) {
-            for ($j = 1; $j <= 10; $j++) {
+            for ($j = 1; $j <= 5; $j++) {
                 $season = new Season();
                 $season->setNumber($j);
                 $season->setYear($faker->year());
                 $season->setDescription($faker->paragraphs(3, true));
 
                 $season->setProgram($this->getReference('program_' . $i));
-                $this->addReference('program_'. $i . '_season_' . $j, $season);
+                $this->addReference('program_'.$i . '_season_' . $j, $season);
 
                 $manager->persist($season);
             }

@@ -22,7 +22,7 @@ class EpisodeFixtures extends Fixture implements DependentFixtureInterface
         */
 
         for ($i = 1; $i <= 5; $i++) {
-            for ($j = 1; $j <= 10; $j++) {
+            for ($j = 1; $j <= 5; $j++) {
                 for ($k = 1; $k <= 10; $k++) {
                     $episode = new Episode();
                     $episode->setTitle($faker->sentence(5));
@@ -33,9 +33,10 @@ class EpisodeFixtures extends Fixture implements DependentFixtureInterface
                     $manager->persist($episode);
                 }
             }
-        }
+        
 
         $manager->flush();
+    }
     }
 
     public function getDependencies()

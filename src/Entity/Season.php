@@ -83,7 +83,7 @@ class Season
 
     public function setProgram(?program $program): self
     {
-        $this->program_id = $program;
+        $this->program = $program;
 
         return $this;
     }
