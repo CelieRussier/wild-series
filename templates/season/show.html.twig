@@ -15,20 +15,21 @@
     <h2>Liste des épisodes disponibles</h2>
 
     {% for episode in season.episodes %}
-    <h3>Episode {{ episode.number }} : {{ episode.title }}</h3>
-    <p>Synopsis : {{ episode.synopsis }}</p>
+    <a href="{{ path("program_episode_show", { program: program.id , season: season.id, episode: episode.id}) }}">
+        <h3>Episode {{ episode.number }} : {{ episode.title }}</h3>
+    </a>
     {% endfor %}
     </section>
 
-    {#<div>
+    <div>
     {% for season in program.seasons %}
         <p>
-            <a href="{{ path("program_season_show", { programId: program.id , seasonId: season.id}) }}">Saison {{ season.number }}, {{ season.year }}</a>
+            <a href="{{ path("program_season_show", { program: program.id , season: season.id}) }}">Saison {{ season.number }}</a>
         </p>
     {% endfor %}
     </div>
 
     <a href="{{ path('program_index') }}">
         Retour à la liste des programmes
-    </a>#}
+    </a>
 {% endblock %}
