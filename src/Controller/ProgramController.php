@@ -6,9 +6,11 @@ use App\Entity\Episode;
 use App\Repository\ProgramRepository;
 use App\Entity\Program;
 use App\Entity\Season;
+use App\Form\ProgramType;
 use App\Repository\EpisodeRepository;
 use App\Repository\SeasonRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\Routing\Annotation\Route;
@@ -52,11 +54,38 @@ Class ProgramController extends AbstractController
     }
 
     #[Route('/program/{program}/season/{season}/episode/{episode}', name: 'program_episode_show')]
-    public function showEpisode(Program $program, Season $season, Episode $episode): Response
+    public function showEpisode(Program $program, Season $season, Episode $episode, EpisodeRepository $episodeRepository): Response
     {
+        $episodes = $episodeRepository->findAll();
         
-        return $this->render('season/show.html.twig', [
-            'program' => $program, 'season' => $season, 'episode' => $episode
+        return $this->render('episode/episode.html.twig', [
+            'program' => $program, 'season' => $season, 'episode' => $episode, 'episodes' => $episodes
          ]);
+    }
+
+    #[Route('/program/new', name: 'program_form')]
+    public function newProgram(Request $request, ProgramRepository $programRepository) : Response
+    {
+        // Create a new Category Object
+        $program = new Program();
+        // Create the associated Form
+        $form = $this->createForm(ProgramType::class, $program);
+        // Get data from HTTP request
+        $form->handleRequest($request);
+        // Was the form submitted ?
+        if ($form->isSubmitted()) {
+            $programRepository->add($program, true);            
+            //true indique à Doctrine de faire la mise à jour dans la BDD
+            // Redirect to categories list
+            return $this->redirectToRoute('program_index');
+            // Deal with the submitted data
+            // For example : persiste & flush the entity
+            // And redirect to a route that display the result
+        }
+
+        // Render the form
+        return $this->renderForm('program/new.html.twig', [
+            'form' => $form,
+        ]);
     }
 }

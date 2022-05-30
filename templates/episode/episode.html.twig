@@ -12,21 +12,21 @@
     </div>
 
     <section>
-    <h2>Liste des épisodes disponibles</h2>
+    <h2>Tous les épisodes de la saison {{ season.number }}</h2>
 
-    {% for episode in episodes %}
+    {% for episode in season.episodes %}
     <p>
-        <a href="{{ path("program_episode_show", { program: program.id , season: season.id}) }}"><h3>Episode {{ episode.number }} : {{ episode.title }}</h3></a>
+        <a href="{{ path("program_episode_show", { program: program.id , season: season.id, episode: episode.id}) }}"><h3>Episode {{ episode.number }} : {{ episode.title }}</h3></a>
     </p>
     {% endfor %}
     </section>
 
     <div>
-    {% for season in program.seasons %}
+
         <p>
-            <a href="{{ path("program_season_show", { program: program.id , season: season.id, episode: episode.id}) }}"> Saison {{ season.number }} épisode {{ episode.number }} : {{ episode.title }}</a>
+            <a href="{{ path("program_show", { id: program.id }) }}"> Retour vers {{ program.title }}</a>
         </p>
-    {% endfor %}
+
     </div>
 
     <a href="{{ path('program_index') }}">
