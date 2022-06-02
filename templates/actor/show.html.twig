@@ -19,7 +19,9 @@
     </table>
 
     <h3>{% for program in actor.programs %}</h3>
-                <p>{{ program.title }}</p>
+                <p>
+                <button class="btn btn-dark"><a href="{{ path("program_show", { id: program.id }) }}">{{ program.title }}</a></button>
+                </p>
         {% else %}
         <p>Pas de séries pour cet acteur</p>
         {% endfor %}
