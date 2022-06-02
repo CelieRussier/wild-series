@@ -8,7 +8,6 @@ use App\Entity\Program;
 use App\Entity\Season;
 use App\Form\ProgramType;
 use App\Repository\EpisodeRepository;
-use App\Repository\SeasonRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -73,7 +72,7 @@ Class ProgramController extends AbstractController
         // Get data from HTTP request
         $form->handleRequest($request);
         // Was the form submitted ?
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $programRepository->add($program, true);            
             //true indique à Doctrine de faire la mise à jour dans la BDD
             // Redirect to categories list
@@ -85,7 +84,8 @@ Class ProgramController extends AbstractController
 
         // Render the form
         return $this->renderForm('program/new.html.twig', [
-            'form' => $form,
+            'form' => $form, 'program' => $program
         ]);
     }
+
 }
