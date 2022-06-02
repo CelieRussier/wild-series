@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
+use App\Repository\ActorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;{}
+use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CategoryRepository::class)]
-class Category
+#[ORM\Entity(repositoryClass: ActorRepository::class)]
+class Actor
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -16,21 +16,16 @@ class Category
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    /*#[Assert\NotBlank(message: 'Ne me laisse pas tout vide')]
-      #[Assert\Length(
-        max: 255,
-        maxMessage: 'La catégorie saisie {{ value }} est trop longue, elle ne devrait pas dépasser {{ limit }} caractères'
-    )]*/
     private $name;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Program::class)]
+    #[ORM\ManyToMany(targetEntity: Program::class, inversedBy: 'actors')]
     private $programs;
 
     public function __construct()
     {
         $this->programs = new ArrayCollection();
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;
@@ -48,6 +43,9 @@ class Category
         return $this;
     }
 
+    /**
+     * @return Collection<int, Program>
+     */
     public function getPrograms(): Collection
     {
         return $this->programs;
@@ -57,7 +55,6 @@ class Category
     {
         if (!$this->programs->contains($program)) {
             $this->programs[] = $program;
-            $program->setCategory($this);
         }
 
         return $this;
@@ -65,12 +62,7 @@ class Category
 
     public function removeProgram(Program $program): self
     {
-        if ($this->programs->removeElement($program)) {
-            // set the owning side to null (unless already changed)
-            if ($program->getCategory() === $this) {
-                $program->setCategory(null);
-            }
-        }
+        $this->programs->removeElement($program);
 
         return $this;
     }
