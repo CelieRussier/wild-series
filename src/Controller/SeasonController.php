@@ -43,9 +43,11 @@ class SeasonController extends AbstractController
     #[Route('/{id}', name: 'app_season_show', methods: ['GET'])]
     public function show(Season $season): Response
     {
+        $episodes = $season->getEpisodes();
+        
         return $this->render('season/show.html.twig', [
-            'season' => $season,
-        ]);
+            'season' => $season, 'episodes' => $episodes
+         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_season_edit', methods: ['GET', 'POST'])]

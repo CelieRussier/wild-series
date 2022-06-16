@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EpisodeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EpisodeRepository::class)]
@@ -24,6 +26,14 @@ class Episode
 
     #[ORM\ManyToOne(targetEntity: Season::class, inversedBy: 'episodes')]
     private $season;
+
+    #[ORM\OneToMany(mappedBy: 'episode', targetEntity: Comment::class, orphanRemoval: true)]
+    private $comments;
+
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -66,12 +76,12 @@ class Episode
         return $this;
     }
 
-    public function getRelation(): ?season
+    public function getRelation(): ?Season
     {
         return $this->relation;
     }
 
-    public function setRelation(?season $relation): self
+    public function setRelation(?Season $relation): self
     {
         $this->relation = $relation;
 
@@ -95,6 +105,36 @@ class Episode
     public function setSeason($season)
     {
         $this->season = $season;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setEpisode($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getEpisode() === $this) {
+                $comment->setEpisode(null);
+            }
+        }
 
         return $this;
     }

@@ -15,7 +15,12 @@
           <a class="nav-link nav-text" href="{{ path('category_index') }}">Catégories</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link nav-text" href="#">Pricing</a>
+        {% if app.user %}
+        {{ app.user.email }}
+         <a href="{{ path('logout') }}"> Se déconnecter</a>
+        {% else %}
+        <a href="{{ path('login') }}"> Se connecter</a>
+        {% endif %}
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle nav-text" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">

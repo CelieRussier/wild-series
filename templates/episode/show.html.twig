@@ -26,6 +26,29 @@
         </tbody>
     </table>
 
+<h2>Commentaires</h2>
+
+{% for existingComment in existingComments %}
+<dl class="row bg-secondary">
+  <dt class="col-sm-3">Auteur :</dt>
+  <dd class="col-sm-9">{{ existingComment.author.email }}</dd>
+
+  <dt class="col-sm-3">Commentaire</dt>
+  <dd class="col-sm-9">
+    <p>{{ existingComment.comment }}</p>
+  </dd>
+  <dt class="col-sm-3">Note</dt>
+  <dd class="col-sm-9">{{ existingComment.rate }}/5</dd>
+</dl>
+{% endfor %}
+
+ {# Ajouter un commentaire #}
+
+ {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    <h5>Ajouter un commentaire</h5>
+    {{ include ('episode/_comment_form.html.twig') }}
+{% endif %}
+
     <a href="{{ path('app_episode_index') }}">back to list</a>
 
     <a href="{{ path('app_episode_edit', {'id': episode.id}) }}">edit</a>

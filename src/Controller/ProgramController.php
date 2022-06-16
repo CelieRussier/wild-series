@@ -8,6 +8,7 @@ use App\Entity\Program;
 use App\Entity\Season;
 use App\Form\ProgramType;
 use App\Repository\EpisodeRepository;
+use App\Service\Slugify;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,7 +46,7 @@ Class ProgramController extends AbstractController
     #[Route('/program/{program}/season/{season}', name: 'program_season_show')]
     public function showSeason(Program $program, Season $season, EpisodeRepository $episodeRepository): Response
     {
-        $episodes = $episodeRepository->findAll();
+        $episodes = $season->getEpisodes();
         
         return $this->render('season/show.html.twig', [
             'program' => $program, 'season' => $season, 'episodes' => $episodes
@@ -63,16 +64,19 @@ Class ProgramController extends AbstractController
     }
 
     #[Route('/program/new', name: 'program_form')]
-    public function newProgram(Request $request, ProgramRepository $programRepository) : Response
+    public function newProgram(Request $request, ProgramRepository $programRepository, Slugify $slugify) : Response
     {
         // Create a new Category Object
         $program = new Program();
         // Create the associated Form
         $form = $this->createForm(ProgramType::class, $program);
+        
         // Get data from HTTP request
         $form->handleRequest($request);
         // Was the form submitted ?
         if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $slugify->generate($program->getTitle());
+            $program->setSlug($slug);
             $programRepository->add($program, true);            
             //true indique à Doctrine de faire la mise à jour dans la BDD
             // Redirect to categories list
